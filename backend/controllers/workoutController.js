@@ -7,11 +7,11 @@ const getWorkouts = async (req, res) => {
   const workouts = await Workout.find({}).sort({ createdAt: -1 });
 
   if (!workouts.length) {
-    res.status(100).send({ msg: 'There are no workouts' });
+    res.status(100).json({ msg: 'There are no workouts' });
   }
   // Return all workouts
 
-  res.status(200).send(workouts);
+  res.status(200).json(workouts);
 };
 
 // Create a workout
@@ -26,11 +26,11 @@ const createWorkout = async (req, res) => {
     const workout = await Workout.create({ title, reps, load });
 
     // Send a response back to the client
-    res.status(200).send(workout);
+    res.status(200).json(workout);
     // catch
   } catch (err) {
     // Send a response back to the client
-    res.status(404).send({ msg: err.message });
+    res.status(404).json({ msg: err.message });
   }
 };
 
@@ -41,7 +41,7 @@ const getWorkout = async (req, res) => {
 
   // Confirm that the id is valid
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).send({ msg: 'Resource not found' });
+    return res.status(404).json({ msg: 'Resource not found' });
   }
 
   // query the db for the workout with the id
@@ -49,27 +49,27 @@ const getWorkout = async (req, res) => {
 
   // if workout does not exist
   if (!workout) {
-    return res.status(404).send({ msg: err.message });
+    return res.status(404).json({ msg: err.message });
   }
 
   // if all goes well send back the workout
-  res.status(200).send(workout);
+  res.status(200).json(workout);
 };
 
 // Delete a single workout
 const deleteWorkout = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).send({ msg: 'This resource does not exist!!' });
+    return res.status(404).json({ msg: 'This resource does not exist!!' });
   }
 
   const workout = await Workout.findByIdAndDelete(id);
 
   if (!workout) {
-    return res.status(404).send({ msg: 'This resource does not exist!!' });
+    return res.status(404).json({ msg: 'This resource does not exist!!' });
   }
 
-  res.status(200).send(workout);
+  res.status(200).json(workout);
 };
 
 // Update a single workout
@@ -77,7 +77,7 @@ const updateWorkout = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).send({ msg: 'This resource does not exist!! ' });
+    return res.status(404).json({ msg: 'This resource does not exist!! ' });
   }
 
   const workout = await Workout.findByIdAndUpdate(id, {
@@ -85,10 +85,10 @@ const updateWorkout = async (req, res) => {
   });
 
   if (!workout) {
-    return res.status(404).send({ msg: 'There resource does not exist in the db' });
+    return res.status(404).json({ msg: 'There resource does not exist in the db' });
   }
 
-  res.status(200).send(workout);
+  res.status(200).json(workout);
 };
 
 module.exports = {
