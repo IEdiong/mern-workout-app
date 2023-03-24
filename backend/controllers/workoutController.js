@@ -3,7 +3,14 @@ const Workout = require('../models/workoutModel');
 // Get all workouts
 const getWorkouts = async (req, res) => {
   // Query the db for all workouts
+  const workouts = await Workout.find({}).sort({ createdAt: -1 });
+
+  if (!workouts.length) {
+    res.status(100).send({ msg: 'There are no workouts' });
+  }
   // Return all workouts
+
+  res.status(200).send(workouts);
 };
 
 // Create a workout
