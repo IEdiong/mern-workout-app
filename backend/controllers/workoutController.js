@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Workout = require('../models/workoutModel');
 
 // Get all workouts
@@ -26,15 +27,34 @@ const createWorkout = async (req, res) => {
 
     // Send a response back to the client
     res.status(200).send(workout);
+    // catch
   } catch (err) {
+    // Send a response back to the client
     res.status(404).send({ msg: err.message });
   }
-
-  // catch
-  // Send a response back to the client
 };
 
 // Get a single workout
+const getWorkout = async (req, res) => {
+  // Get the id of the workout from the client
+  const { id } = req.params;
+
+  // Confirm that the id is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).send({ msg: 'Resource not found' });
+  }
+
+  // query the db for the workout with the id
+  const workout = await Workout.findById(id);
+
+  // if workout does not exist
+  if (!workout) {
+    return res.status(404).send({ msg: err.message });
+  }
+
+  // if all goes well send back the workout
+  res.status(200).send(workout);
+};
 
 // Delete a single workout
 
@@ -43,4 +63,5 @@ const createWorkout = async (req, res) => {
 module.exports = {
   getWorkouts,
   createWorkout,
+  getWorkout,
 };

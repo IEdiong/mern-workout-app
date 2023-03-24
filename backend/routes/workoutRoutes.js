@@ -1,5 +1,5 @@
 const express = require('express');
-const { createWorkout, getWorkouts } = require('../controllers/workoutController');
+const { createWorkout, getWorkouts, getWorkout } = require('../controllers/workoutController');
 
 const router = express.Router();
 
@@ -10,9 +10,7 @@ router.get('/', getWorkouts);
 router.post('/', createWorkout);
 
 // GET a single workout
-router.get('/:id', (req, res) => {
-  res.send({ msg: 'Returns a single workout' });
-});
+router.get('/:id', getWorkout);
 
 // DELETE a single workout
 router.delete('/:id', (req, res) => {
