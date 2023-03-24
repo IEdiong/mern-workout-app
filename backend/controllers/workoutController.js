@@ -73,10 +73,28 @@ const deleteWorkout = async (req, res) => {
 };
 
 // Update a single workout
+const updateWorkout = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).send({ msg: 'This resource does not exist!! ' });
+  }
+
+  const workout = await Workout.findByIdAndUpdate(id, {
+    ...req.body,
+  });
+
+  if (!workout) {
+    return res.status(404).send({ msg: 'There resource does not exist in the db' });
+  }
+
+  res.status(200).send(workout);
+};
 
 module.exports = {
   getWorkouts,
   createWorkout,
   getWorkout,
   deleteWorkout,
+  updateWorkout,
 };
