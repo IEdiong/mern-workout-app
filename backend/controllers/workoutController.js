@@ -19,6 +19,17 @@ const createWorkout = async (req, res) => {
   // Get the data sent from the client
   const { title, reps, load } = req.body;
 
+  // empty fields check
+  const emptyFields = [];
+  if (!title) emptyFields.push('title');
+  if (!reps) emptyFields.push('reps');
+  if (!load) emptyFields.push('load');
+
+  if (emptyFields.length > 0)
+    return res
+      .status(400)
+      .json({ msg: 'Please fill in all fields', emptyFields });
+
   // try
   try {
     // Create a workout with the data sent from client
@@ -85,7 +96,9 @@ const updateWorkout = async (req, res) => {
   });
 
   if (!workout) {
-    return res.status(404).json({ msg: 'There resource does not exist in the db' });
+    return res
+      .status(404)
+      .json({ msg: 'There resource does not exist in the db' });
   }
 
   res.status(200).json(workout);
